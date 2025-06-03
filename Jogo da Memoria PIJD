@@ -1,81 +1,112 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-public class JogoMemoria extends JFrame implements ActionListener {
-    private JButton[] botoes;
-    private String[] valores;
-    private JButton primeiroBotao, segundoBotao;
-    private int paresEncontrados = 0;
+    <div class="container">
 
-    public JogoMemoria() {
-        setTitle("Jogo da Memória - Anime");
-        setSize(500, 500);
-        setLayout(new GridLayout(4, 4));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        <div class="sidebar">
+            <div class="info">
+                <div class="timer">⏱️ Tempo: <span id="timer">0</span> segundos</div>
+                <button id="reset-button">🔄 Resetar Jogo</button>
+            </div>
 
-        botoes = new JButton[16];
-        valores = gerarPares();
+            <div class="message" id="win-message">
+                🏆 Parabéns! Você completou o jogo!
+            </div>
 
-        for (int i = 0; i < 16; i++) {
-            botoes[i] = new JButton();
-            botoes[i].setFont(new Font("Arial", Font.BOLD, 24));
-            botoes[i].addActionListener(this);
-            add(botoes[i]);
-        }
+            <div class="ranking">
+                <h2>🏅 Ranking</h2>
+                <ol id="ranking-list">
+                    <li>--- segundos</li>
+                    <li>--- segundos</li>
+                    <li>--- segundos</li>
+                </ol>
+            </div>
+        </div>
 
-        setVisible(true);
-    }
 
-    private String[] gerarPares() {
-        String[] itens = {"A", "B", "C", "D", "E", "F", "G", "H"}; // Representa os personagens
-        List<String> lista = new ArrayList<>();
+        <section class="memory-game">
 
-        for (String item : itens) {
-            lista.add(item);
-            lista.add(item);
-        }
+            <div class="memory-card" data-framework="a">
+                <img class="front-face" src="img/a.jpg" alt="Carta A">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="a">
+                <img class="front-face" src="img/a.jpg" alt="Carta A">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-        Collections.shuffle(lista);
-        return lista.toArray(new String[0]);
-    }
+            <div class="memory-card" data-framework="b">
+                <img class="front-face" src="img/b.jpg" alt="Carta B">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="b">
+                <img class="front-face" src="img/b.jpg" alt="Carta B">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-    public void actionPerformed(ActionEvent e) {
-        JButton botaoClicado = (JButton) e.getSource();
-        int index = Arrays.asList(botoes).indexOf(botaoClicado);
+            <div class="memory-card" data-framework="c">
+                <img class="front-face" src="img/c.jpg" alt="Carta C">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="c">
+                <img class="front-face" src="img/c.jpg" alt="Carta C">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-        if (botaoClicado.getText().equals("") && segundoBotao == null) {
-            botaoClicado.setText(valores[index]);
+            <div class="memory-card" data-framework="d">
+                <img class="front-face" src="img/d.jpg" alt="Carta D">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="d">
+                <img class="front-face" src="img/d.jpg" alt="Carta D">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-            if (primeiroBotao == null) {
-                primeiroBotao = botaoClicado;
-            } else {
-                segundoBotao = botaoClicado;
-                Timer timer = new Timer(1000, evt -> verificarPar());
-                timer.setRepeats(false);
-                timer.start();
-            }
-        }
-    }
+            <div class="memory-card" data-framework="e">
+                <img class="front-face" src="img/e.jpg" alt="Carta E">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="e">
+                <img class="front-face" src="img/e.jpg" alt="Carta E">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-    private void verificarPar() {
-        if (primeiroBotao.getText().equals(segundoBotao.getText())) {
-            primeiroBotao.setEnabled(false);
-            segundoBotao.setEnabled(false);
-            paresEncontrados++;
-            if (paresEncontrados == 8) {
-                JOptionPane.showMessageDialog(this, "Parabéns! Você encontrou todos os pares!");
-            }
-        } else {
-            primeiroBotao.setText("");
-            segundoBotao.setText("");
-        }
-        primeiroBotao = null;
-        segundoBotao = null;
-    }
+            <div class="memory-card" data-framework="f">
+                <img class="front-face" src="img/f.jpg" alt="Carta F">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="f">
+                <img class="front-face" src="img/f.jpg" alt="Carta F">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
 
-    public static void main(String[] args) {
-        new JogoMemoria();
-    }
-}
+            <div class="memory-card" data-framework="g">
+                <img class="front-face" src="img/g.jpg" alt="Carta G">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="g">
+                <img class="front-face" src="img/g.jpg" alt="Carta G">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+
+            <div class="memory-card" data-framework="h">
+                <img class="front-face" src="img/h.jpg" alt="Carta H">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+            <div class="memory-card" data-framework="h">
+                <img class="front-face" src="img/h.jpg" alt="Carta H">
+                <img class="back-face" src="img/verso.jpeg" alt="Verso">
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
