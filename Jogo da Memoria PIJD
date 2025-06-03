@@ -1,0 +1,81 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class JogoMemoria extends JFrame implements ActionListener {
+    private JButton[] botoes;
+    private String[] valores;
+    private JButton primeiroBotao, segundoBotao;
+    private int paresEncontrados = 0;
+
+    public JogoMemoria() {
+        setTitle("Jogo da Memória - Anime");
+        setSize(500, 500);
+        setLayout(new GridLayout(4, 4));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        botoes = new JButton[16];
+        valores = gerarPares();
+
+        for (int i = 0; i < 16; i++) {
+            botoes[i] = new JButton();
+            botoes[i].setFont(new Font("Arial", Font.BOLD, 24));
+            botoes[i].addActionListener(this);
+            add(botoes[i]);
+        }
+
+        setVisible(true);
+    }
+
+    private String[] gerarPares() {
+        String[] itens = {"A", "B", "C", "D", "E", "F", "G", "H"}; // Representa os personagens
+        List<String> lista = new ArrayList<>();
+
+        for (String item : itens) {
+            lista.add(item);
+            lista.add(item);
+        }
+
+        Collections.shuffle(lista);
+        return lista.toArray(new String[0]);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        JButton botaoClicado = (JButton) e.getSource();
+        int index = Arrays.asList(botoes).indexOf(botaoClicado);
+
+        if (botaoClicado.getText().equals("") && segundoBotao == null) {
+            botaoClicado.setText(valores[index]);
+
+            if (primeiroBotao == null) {
+                primeiroBotao = botaoClicado;
+            } else {
+                segundoBotao = botaoClicado;
+                Timer timer = new Timer(1000, evt -> verificarPar());
+                timer.setRepeats(false);
+                timer.start();
+            }
+        }
+    }
+
+    private void verificarPar() {
+        if (primeiroBotao.getText().equals(segundoBotao.getText())) {
+            primeiroBotao.setEnabled(false);
+            segundoBotao.setEnabled(false);
+            paresEncontrados++;
+            if (paresEncontrados == 8) {
+                JOptionPane.showMessageDialog(this, "Parabéns! Você encontrou todos os pares!");
+            }
+        } else {
+            primeiroBotao.setText("");
+            segundoBotao.setText("");
+        }
+        primeiroBotao = null;
+        segundoBotao = null;
+    }
+
+    public static void main(String[] args) {
+        new JogoMemoria();
+    }
+}
